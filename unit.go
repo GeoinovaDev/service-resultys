@@ -4,7 +4,6 @@ import (
 	"sync"
 
 	"git.resultys.com.br/lib/lower/promise"
-	"git.resultys.com.br/motor/models/coleta"
 	"git.resultys.com.br/motor/models/token"
 )
 
@@ -12,7 +11,7 @@ import (
 type Unit struct {
 	// public
 	Token  *token.Token
-	Coleta *coleta.Coleta
+	Item   interface{}
 	Finish *promise.Promise
 
 	// private
@@ -25,7 +24,6 @@ type Unit struct {
 func New(token *token.Token) *Unit {
 	unit := &Unit{Token: token}
 
-	unit.Coleta = &coleta.Coleta{}
 	unit.mutex = &sync.Mutex{}
 	unit.Finish = &promise.Promise{}
 
@@ -46,12 +44,12 @@ func (u *Unit) Alloc(total int) *Unit {
 	return u
 }
 
-// Release libera uma uniadde
+// Release libera uma unidade
 func (u *Unit) Release() {
 	u.mutex.Lock()
 
 	u.totalRunning--
-	if u.totalRunning == 0 {
+	if u.totalRunning == 0 && u.callback != nil {
 		u.callback(u)
 	}
 
