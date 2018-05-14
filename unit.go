@@ -18,6 +18,8 @@ type Unit struct {
 	totalRunning int
 	callback     func(*Unit)
 	mutex        *sync.Mutex
+
+	wg *sync.WaitGroup
 }
 
 // New cria uma unidade de processamento
@@ -26,6 +28,7 @@ func New(token *token.Token) *Unit {
 
 	unit.mutex = &sync.Mutex{}
 	unit.Finish = &promise.Promise{}
+	unit.wg = &sync.WaitGroup{}
 
 	return unit
 }
@@ -40,8 +43,16 @@ func (u *Unit) Done(callback func(*Unit)) *Unit {
 // Alloc incrementa
 func (u *Unit) Alloc(total int) *Unit {
 	u.totalRunning = total
+	u.wg.Add(total)
 
 	return u
+}
+
+// Wait ...
+func (u *Unit) Wait() {
+	if u.totalRunning > 0 {
+		u.wg.Wait()
+	}
 }
 
 // Release libera uma unidade
@@ -53,5 +64,6 @@ func (u *Unit) Release() {
 		u.callback(u)
 	}
 
+	u.wg.Done()
 	u.mutex.Unlock()
 }
