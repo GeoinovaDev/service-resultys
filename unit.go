@@ -58,6 +58,7 @@ func (u *Unit) Wait() {
 // Release libera uma unidade
 func (u *Unit) Release() {
 	u.mutex.Lock()
+	defer u.mutex.Unlock()
 
 	u.totalRunning--
 	if u.totalRunning == 0 {
@@ -67,6 +68,4 @@ func (u *Unit) Release() {
 
 		u.wg.Done()
 	}
-
-	u.mutex.Unlock()
 }
