@@ -60,10 +60,13 @@ func (u *Unit) Release() {
 	u.mutex.Lock()
 
 	u.totalRunning--
-	if u.totalRunning == 0 && u.callback != nil {
-		u.callback(u)
+	if u.totalRunning == 0 {
+		if u.callback != nil {
+			u.callback(u)
+		}
+
+		u.wg.Done()
 	}
 
-	u.wg.Done()
 	u.mutex.Unlock()
 }
