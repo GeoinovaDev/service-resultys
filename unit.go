@@ -3,16 +3,14 @@ package service
 import (
 	"sync"
 
-	"git.resultys.com.br/lib/lower/promise"
 	"git.resultys.com.br/motor/models/token"
 )
 
 // Unit struct
 type Unit struct {
 	// public
-	Token  *token.Token
-	Item   interface{}
-	Finish *promise.Promise
+	Token *token.Token
+	Item  interface{}
 
 	// private
 	totalRunning int
@@ -23,11 +21,10 @@ type Unit struct {
 }
 
 // New cria uma unidade de processamento
-func New(token *token.Token) *Unit {
-	unit := &Unit{Token: token}
+func New(tken *token.Token, item interface{}) *Unit {
+	unit := &Unit{Token: tken, Item: item}
 
 	unit.mutex = &sync.Mutex{}
-	unit.Finish = &promise.Promise{}
 	unit.wg = &sync.WaitGroup{}
 
 	return unit
