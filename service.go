@@ -6,5 +6,6 @@ import "time"
 type Service interface {
 	Add(*Unit)
 	Load()
+	Reload()
 	Stats() time.Duration
 }
