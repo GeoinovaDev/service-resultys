@@ -11,9 +11,9 @@ import (
 // Unit struct
 type Unit struct {
 	// public
-	Token  *token.Token
-	Item   interface{}
-	Finish *promise.Promise
+	Token   *token.Token
+	Item    interface{}
+	Promise *promise.Promise
 
 	// private
 	totalRunning int
@@ -28,7 +28,7 @@ func New(tken *token.Token, item interface{}) *Unit {
 
 	unit.mutex = &sync.Mutex{}
 	unit.wg = &sync.WaitGroup{}
-	unit.Finish = promise.New()
+	unit.Promise = promise.New()
 
 	return unit
 }
