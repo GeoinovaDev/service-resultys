@@ -1,9 +1,8 @@
 package service
 
 import (
+	"strconv"
 	"sync"
-
-	"git.resultys.com.br/lib/lower/promise"
 
 	"git.resultys.com.br/motor/models/token"
 )
@@ -11,9 +10,9 @@ import (
 // Unit struct
 type Unit struct {
 	// public
-	Token   *token.Token
-	Item    interface{}
-	Promise *promise.Promise
+	ID    int
+	Token *token.Token
+	Item  interface{}
 
 	// private
 	totalRunning int
@@ -28,9 +27,13 @@ func New(tken *token.Token, item interface{}) *Unit {
 
 	unit.mutex = &sync.Mutex{}
 	unit.wg = &sync.WaitGroup{}
-	unit.Promise = promise.New()
 
 	return unit
+}
+
+// GetUUID ...
+func (u *Unit) GetUUID() string {
+	return strconv.Itoa(u.ID)
 }
 
 // Done callback lançado ao termino do processamento
