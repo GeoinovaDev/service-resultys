@@ -4,15 +4,17 @@ import (
 	"strconv"
 	"sync"
 
+	"git.resultys.com.br/lib/lower/promise"
 	"git.resultys.com.br/motor/models/token"
 )
 
 // Unit struct
 type Unit struct {
 	// public
-	ID    int
-	Token *token.Token
-	Item  interface{}
+	ID     int
+	Token  *token.Token
+	Item   interface{}
+	Finish *promise.Promise
 
 	// private
 	totalRunning int
@@ -24,6 +26,7 @@ type Unit struct {
 // New cria uma unidade de processamento
 func New(tken *token.Token, item interface{}) *Unit {
 	unit := &Unit{Token: tken, Item: item}
+	unit.Finish = promise.New()
 
 	unit.mutex = &sync.Mutex{}
 	unit.wg = &sync.WaitGroup{}
