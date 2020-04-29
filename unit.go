@@ -11,9 +11,9 @@ import (
 // Unit struct
 type Unit struct {
 	// public
-	ID     int
-	Token  *token.Token
-	Item   interface{}
+	ID     int          `json:"id"`
+	Token  *token.Token `json:"token"`
+	Item   interface{}  `json:"data"`
 	Finish *promise.Promise
 
 	// private
