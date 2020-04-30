@@ -14,6 +14,7 @@ type Unit struct {
 	ID     int          `json:"id"`
 	Token  *token.Token `json:"token"`
 	Item   interface{}  `json:"data"`
+	Tag    string       `json:"tag"`
 	Finish *promise.Promise
 
 	// private
