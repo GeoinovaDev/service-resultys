@@ -3,19 +3,21 @@ package service
 import (
 	"strconv"
 	"sync"
+	"time"
 
-	"git.resultys.com.br/lib/lower/promise"
 	"git.resultys.com.br/motor/models/token"
 )
 
 // Unit struct
 type Unit struct {
 	// public
-	ID     int          `json:"id"`
-	Token  *token.Token `json:"token"`
-	Item   interface{}  `json:"data"`
-	Tag    string       `json:"tag"`
-	Finish *promise.Promise
+	ID         int          `json:"id"`
+	Token      *token.Token `json:"token"`
+	Item       interface{}  `json:"data"`
+	Status     string       `json:"status"`
+	CreateAt   time.Time    `json:"create_at"`
+	UpdateAt   time.Time    `json:"update_at"`
+	Processing int          `json:"processing"`
 
 	// private
 	totalRunning int
@@ -27,7 +29,6 @@ type Unit struct {
 // New cria uma unidade de processamento
 func New(tken *token.Token, item interface{}) *Unit {
 	unit := &Unit{Token: tken, Item: item}
-	unit.Finish = promise.New()
 
 	unit.mutex = &sync.Mutex{}
 	unit.wg = &sync.WaitGroup{}
@@ -38,6 +39,12 @@ func New(tken *token.Token, item interface{}) *Unit {
 // GetUUID ...
 func (u *Unit) GetUUID() string {
 	return strconv.Itoa(u.ID)
+}
+
+// SetStatus ...
+func (u *Unit) SetStatus(status string) {
+	u.Status = status
+	u.UpdateAt = time.Now()
 }
 
 // Done callback lançado ao termino do processamento
