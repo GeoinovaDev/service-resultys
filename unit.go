@@ -1,7 +1,6 @@
 package service
 
 import (
-	"strconv"
 	"sync"
 	"time"
 
@@ -34,11 +33,6 @@ func New(tken *token.Token, item interface{}) *Unit {
 	unit.wg = &sync.WaitGroup{}
 
 	return unit
-}
-
-// GetUUID ...
-func (u *Unit) GetUUID() string {
-	return strconv.Itoa(u.ID)
 }
 
 // SetStatus ...
