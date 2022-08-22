@@ -4,7 +4,7 @@ import (
 	"sync"
 	"time"
 
-	"git.resultys.com.br/motor/models/token"
+	"github.com/GeoinovaDev/models-resultys/token"
 )
 
 // Unit struct
